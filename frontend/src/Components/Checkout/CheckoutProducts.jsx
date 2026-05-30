@@ -86,6 +86,7 @@ const CheckoutProducts = () => {
                 font-bold
                 hover:bg-gray-100
                 transition-all
+                cursor-pointer
               "
               >
                 -
@@ -120,6 +121,7 @@ const CheckoutProducts = () => {
                 font-bold
                 hover:bg-gray-100
                 transition-all
+                cursor-pointer
               "
               >
                 +
@@ -224,6 +226,7 @@ const CheckoutProducts = () => {
               font-semibold
               hover:text-red-500
               transition-all
+              cursor-pointer
             "
             >
               REMOVE

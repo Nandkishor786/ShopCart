@@ -219,6 +219,7 @@ object-contain
                   rounded-full
                   text-xl
                   transition-all
+                  cursor-pointer
                 "
                   >
                     -
@@ -243,6 +244,7 @@ object-contain
                   rounded-full
                   text-xl
                   transition-all
+                  cursor-pointer
                 "
                   >
                     +
@@ -279,6 +281,7 @@ text-2xl md:text-3xl  font-bold
                 p-4
                 rounded-full
                 transition-all
+                cursor-pointer
               "
                 >
                   <FaTrash size={20} />
@@ -420,6 +423,7 @@ py-3
 rounded-xl
 font-semibold
 transition-all
+cursor-pointer
 "
               >
                 Apply
@@ -448,6 +452,7 @@ text-base md:text-lg
             transition-all
             duration-300
             hover:scale-105
+            cursor-pointer
           "
           >
             Proceed To Checkout

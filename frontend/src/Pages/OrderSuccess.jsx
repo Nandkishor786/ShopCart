@@ -96,6 +96,7 @@ const OrderSuccess = () => {
           font-semibold
           transition-all
           duration-300
+          cursor-pointer
         "
         >
           Continue Shopping

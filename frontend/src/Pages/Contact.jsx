@@ -261,6 +261,7 @@ const Contact = () => {
               md:text-lg
               font-bold
               transition-all
+              cursor-pointer
             "
             >
               Send Message

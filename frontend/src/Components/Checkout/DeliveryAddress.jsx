@@ -114,6 +114,7 @@ const DeliveryAddress = () => {
           rounded-md
           hover:bg-[#F5F7FF]
           transition-all
+          cursor-pointer
         "
         >
           Change

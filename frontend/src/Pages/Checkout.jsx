@@ -1,14 +1,14 @@
 import { useSelector, useDispatch } from "react-redux";
 
-import CheckoutProducts from "../Components/Checkout/CheckoutProducts";
+import CheckoutProducts from "../Components/Checkout/CheckoutProducts.jsx";
 
-import CheckoutSteps from "../Components/Checkout/CheckoutSteps";
+import CheckoutSteps from "../Components/Checkout/CheckoutSteps.jsx";
 
-import DeliveryAddress from "../Components/Checkout/DeliveryAddress";
+import DeliveryAddress from "../Components/Checkout/DeliveryAddress.jsx";
 
 import { cartCalculations } from "../utils/cartCalculations";
 import { useState } from "react";
-import PaymentMethods from "../Components/Checkout/PaymentMethods";
+import PaymentMethods from "../Components/Checkout/PaymentMethods.jsx";
 import { useNavigate } from "react-router-dom";
 import { successToast } from "../utils/toast";
 import { clearCart } from "../features/cart/cartSlice.js";

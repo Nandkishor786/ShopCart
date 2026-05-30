@@ -1,8 +1,7 @@
-  
-  import Hero from "../components/Hero";
-  import Features from "../components/Features";
-  import About from "./About";
-  import Contact from "./Contact";
+import Hero from '../Components/Hero'
+import Features from "../Components/Features";
+import About from "./About";
+import Contact from "./Contact";
   
   const Home = () => {
 

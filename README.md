@@ -179,16 +179,32 @@ Frontend: https://your-vercel-url.vercel.app
 
 Backend API: https://your-render-url.onrender.com
 
+
 ## 📸 Screenshots
 
+### Home Page
 ![Home Page](./screenshots/home_page.png)
+
+### Product Page
 ![Product Page](./screenshots/product_page.png)
-![Cart Page](./screenshots//cart.png)
-![checkout page](./screenshots/checkout.png)
-![checkout page](./screenshots//checkoutPage.png)
-![rozorpay 1](./screenshots/rozorpay.png)
-![rozorpay 2](./screenshots/rozorpay2.png)
-![order success](./screenshots//orderSuccess.png)
+
+### Cart Page
+![Cart Page](./screenshots/cart.png)
+
+### Checkout - Order Summary
+![Checkout Page](./screenshots/checkout.png)
+
+### Checkout - Payment Method
+![Payment Method](./screenshots/checkoutPage.png)
+
+### Razorpay Payment Gateway
+![Razorpay Payment 1](./screenshots/rozorpay.png)
+
+### Razorpay Payment Gateway
+![Razorpay Payment 2](./screenshots/rozorpay2.png)
+
+### Order Success Page
+![Order Success](./screenshots/orderSuccess.png)
 
 
 ## 🎯 Future Improvements

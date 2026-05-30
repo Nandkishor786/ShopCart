@@ -1,4 +1,3 @@
-import React from "react";
 import { FaTruck, FaCreditCard, FaStar } from "react-icons/fa";
 
 const Features = () => {

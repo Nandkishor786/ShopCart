@@ -93,9 +93,10 @@
               mb-6
             "
             >
-              ShopCart is a modern ecommerce platform built to deliver an amazing
-              shopping experience with premium products, secure payments, and fast
-              worldwide delivery.
+              ShopCart is a modern full-stack e-commerce platform designed to
+              deliver a seamless and secure online shopping experience. Users
+              can explore products, manage their shopping cart, and complete
+              purchases through an intuitive and user-friendly interface.
             </p>
 
             <p
@@ -107,9 +108,10 @@
               mb-8
             "
             >
-              Our mission is to make online shopping simple, reliable, and
-              enjoyable for everyone using modern technologies like React and
-              Redux Toolkit.
+              Built with React, Redux Toolkit, Node.js, Express.js, MongoDB
+              Atlas, and Razorpay, ShopCart showcases modern web development
+              practices, secure payment integration, responsive design, and
+              scalable architecture for real-world e-commerce applications. 
             </p>
 
             {/* Stats */}

@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+.Toastify__close-button {
+  color: black !important;
+
+  opacity: 1 !important;
+}

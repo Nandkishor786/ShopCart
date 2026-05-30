@@ -181,7 +181,8 @@ Backend API: https://your-render-url.onrender.com
 
 ## 📸 Screenshots
 
-![Home page](./screenshots//home.png)
+![Home Page](./screenshots/home_page.png)
+![Product Page](./screenshots/product_page.png)
 ![Cart Page](./screenshots//cart.png)
 ![checkout page](./screenshots/checkout.png)
 ![checkout page](./screenshots//checkoutPage.png)

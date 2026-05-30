@@ -8,8 +8,24 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import Checkout from "./Pages/Checkout";
 import OrderSuccess from "./Pages/OrderSuccess";
+import { useEffect, useState } from "react";
+import SplashScreen from "./Components/SplashScreen";
 
 function App() {
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setLoading(false);
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }, []);
+
+    if (loading) {
+      return <SplashScreen/>;
+    }
+
   return (
     <div className="min-h-screen w-full">
       <Routes>

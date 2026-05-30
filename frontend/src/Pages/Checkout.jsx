@@ -1,381 +1,439 @@
-import { useSelector, useDispatch } from "react-redux";
+  import { useSelector, useDispatch } from "react-redux";
 
-import CheckoutProducts from "../Components/Checkout/CheckoutProducts.jsx";
+  import CheckoutProducts from "../Components/Checkout/CheckoutProducts.jsx";
 
-import CheckoutSteps from "../Components/Checkout/CheckoutSteps.jsx";
+  import CheckoutSteps from "../Components/Checkout/CheckoutSteps.jsx";
 
-import DeliveryAddress from "../Components/Checkout/DeliveryAddress.jsx";
+  import DeliveryAddress from "../Components/Checkout/DeliveryAddress.jsx";
 
-import { cartCalculations } from "../utils/cartCalculations";
-import { useState } from "react";
-import PaymentMethods from "../Components/Checkout/PaymentMethods.jsx";
-import { useNavigate } from "react-router-dom";
-import { successToast } from "../utils/toast";
-import { clearCart } from "../features/cart/cartSlice.js";
-import { createOrder } from "../services/paymentService.js";
+  import { cartCalculations } from "../utils/cartCalculations";
+  import { useState } from "react";
+  import PaymentMethods from "../Components/Checkout/PaymentMethods.jsx";
+  import { useNavigate } from "react-router-dom";
+  import { successToast } from "../utils/toast";
+  import { clearCart } from "../features/cart/cartSlice.js";
+  import { createOrder } from "../services/paymentService.js";
 
-const Checkout = () => {
-  const { cartItems } = useSelector((state) => state.cart);
-  const dispatch = useDispatch();
+  const Checkout = () => {
+    const { cartItems } = useSelector((state) => state.cart);
+    const dispatch = useDispatch();
+    const [loading, setLoading] = useState(false);
 
-  const {
-    subtotal,
+    const [step, setStep] = useState(2);
 
-    shipping,
+    const navigate = useNavigate();
+    const [selectedMethod, setSelectedMethod] = useState("cod");
 
-    tax,
+    const {
+      subtotal,
 
-    discount,
+      shipping,
 
-    total,
+      tax,
 
-    itemsCount,
-  } = cartCalculations(cartItems);
+      discount,
 
-  const [step, setStep] = useState(2);
+      total,
 
-  const navigate = useNavigate();
-  const [selectedMethod, setSelectedMethod] = useState("cod");
+      itemsCount,
+    } = cartCalculations(cartItems);
 
-  //  console.log(window.Razorpay);
-  const handlePayment = async () => {
-     try {
-       const order = await createOrder(total);
-       console.log(order);
+  
 
-       const options = {
-         key: import.meta.env.VITE_RAZORPAY_KEY,
+    //  console.log(window.Razorpay);
+    const handlePayment = async () => {
+      try {
+            setLoading(true);
+        const order = await createOrder(total);
+        console.log(order);
 
-         amount: order.amount,
+        const options = {
+          key: import.meta.env.VITE_RAZORPAY_KEY,
 
-         currency: order.currency,
+          amount: order.amount,
 
-         order_id: order.id,
+          currency: order.currency,
 
-         name: "ShopCart",
-         method: {
-           upi: true,
-           card: true,
-           netbanking: true,
-           wallet: true,
-         },
-         prefill: {
-           name: "Nandkishor",
-           email: "nandkishor@example.com",
-           contact: "6261775520",
-         },
+          order_id: order.id,
 
-         handler: function (response) {
-           console.log(response);
+          name: "ShopCart",
+          method: {
+            upi: true,
+            card: true,
+            netbanking: true,
+            wallet: true,
+          },
+          prefill: {
+            name: "Nandkishor",
+            email: "nandkishor@example.com",
+            contact: "6261775520",
+          },
+          modal: {
+            ondismiss: function () {
+              setLoading(false);
+            },
+          },
 
-           successToast("Payment Successful");
+          handler: function (response) {
+            console.log(response);
 
-           dispatch(clearCart());
+            successToast("Payment Successful");
 
-           navigate("/order-success");
-         },
-       };
-       const razorpay = new window.Razorpay(options);
-       razorpay.open();
-     } catch (error) {
-      console.log(error);
-       console.log(error.response?.data);
-     }
-   
+            dispatch(clearCart());
+
+            navigate("/order-success");
+          },
+        };
+        const razorpay = new window.Razorpay(options);
+        setLoading(false);
+
+        razorpay.open();
+
+      } catch (error) {
+          setLoading(false);
+        console.log(error);
+        console.log(error.response?.data);
+      }
+    
+    };
+
+  const handlePlaceOrder = async () => {
+    // COD
+    if (selectedMethod === "cod") {
+      successToast("Order Placed Successfully");
+
+      dispatch(clearCart());
+
+      navigate("/order-success");
+
+      return;
+    }
+    // ONLINE PAYMENT
+    await handlePayment();
   };
 
-const handlePlaceOrder = async () => {
-  // COD
-  if (selectedMethod === "cod") {
-    successToast("Order Placed Successfully");
-
-    dispatch(clearCart());
-
-    navigate("/order-success");
-
-    return;
-  }
-  // ONLINE PAYMENT
-  await handlePayment();
-};
-
-  return (
-    <div
-      className="
-      min-h-screen
-      bg-zinc-100
-      py-6
-      md:py-10
-    "
-    >
-      <div
-        className="
-        max-w-7xl
-        mx-auto
-        px-4
-        sm:px-6
-        lg:px-8
-        grid
-        grid-cols-1
-        lg:grid-cols-[2fr_1fr]
-        gap-4
-        md:gap-6
-      "
-      >
-        {/* LEFT SIDE */}
-        <div className="space-y-4">
-          {/* CHECKOUT STEPS */}
+    return (
+      <>
+        {loading && (
           <div
             className="
-            bg-white
-            rounded-lg
-            shadow-sm
-            w-full
-            overflow-hidden
-          "
+      fixed
+      inset-0
+      bg-black/50
+      flex
+      items-center
+      justify-center
+      z-[9999]
+    "
           >
-            <CheckoutSteps step={step} setStep={setStep}/>
+            <div
+              className="
+        bg-white
+        px-8
+        py-6
+        rounded-xl
+        shadow-lg
+        flex
+        flex-col
+        items-center
+        gap-4
+      "
+            >
+              <div
+                className="
+          w-12
+          h-12
+          border-4
+          border-gray-300
+          border-t-[#FB641B]
+          rounded-full
+          animate-spin
+        "
+              />
+
+              <p className="font-medium text-gray-700">Opening Razorpay...</p>
+            </div>
           </div>
-
-          {step === 2 ? (
-            <>
-              <div
-                className="
-                bg-white
-                rounded-lg
-                shadow-sm
-                w-full
-                overflow-hidden
-              "
-              >
-                <DeliveryAddress />
-              </div>
-
-              <div
-                className="
-                bg-white
-                rounded-lg
-                shadow-sm
-                w-full
-                overflow-hidden
-              "
-              >
-                <CheckoutProducts />
-              </div>
-            </>
-          ) : (
-            <PaymentMethods
-              selectedMethod={selectedMethod}
-              setSelectedMethod={setSelectedMethod}
-            />
-          )}
-        </div>
-
-        {/* RIGHT SIDE */}
+        )}{" "}
         <div
           className="
-          bg-white
-          rounded-lg
-          p-4
-          md:p-6
-          shadow-sm
-          h-fit
-          lg:sticky
-          lg:top-24
-        "
+        min-h-screen
+        bg-zinc-100
+        py-6
+        md:py-10
+      "
         >
-          {/* HEADING */}
-          <h2
+          <div
             className="
-            text-lg
-            md:text-xl
-            font-semibold
-            text-gray-500
-            border-b
-            border-[#E3E3E3]
-            pb-4
-          "
+          max-w-7xl
+          mx-auto
+          px-4
+          sm:px-6
+          lg:px-8
+          grid
+          grid-cols-1
+          lg:grid-cols-[2fr_1fr]
+          gap-4
+          md:gap-6
+        "
           >
-            PRICE DETAILS
-          </h2>
-
-          {/* DETAILS */}
-          <div className="space-y-5 mt-6">
-            <div
-              className="
-              flex
-              items-center
-              justify-between
-              text-sm
-              sm:text-base
-              md:text-lg
-            "
-            >
-              <span className="text-gray-700">Price ({itemsCount} items)</span>
-
-              <span>₹ {subtotal.toFixed(2)}</span>
-            </div>
-
-            <div
-              className="
-              flex
-              items-center
-              justify-between
-              text-sm
-              sm:text-base
-              md:text-lg
-            "
-            >
-              <span className="text-gray-700">Discount</span>
-
-              <span
+            {/* LEFT SIDE */}
+            <div className="space-y-4">
+              {/* CHECKOUT STEPS */}
+              <div
                 className="
-                text-green-600
-                font-medium
-              "
-              >
-                - ₹ {discount.toFixed(2)}
-              </span>
-            </div>
-
-            <div
-              className="
-              flex
-              items-center
-              justify-between
-              text-sm
-              sm:text-base
-              md:text-lg
+              bg-white
+              rounded-lg
+              shadow-sm
+              w-full
+              overflow-hidden
             "
-            >
-              <span className="text-gray-700">Delivery Charges</span>
+              >
+                <CheckoutSteps step={step} setStep={setStep} />
+              </div>
 
-              {shipping === 0 ? (
-                <span
-                  className="
-                  text-green-600
-                  font-medium
+              {step === 2 ? (
+                <>
+                  <div
+                    className="
+                  bg-white
+                  rounded-lg
+                  shadow-sm
+                  w-full
+                  overflow-hidden
                 "
-                >
-                  FREE
-                </span>
+                  >
+                    <DeliveryAddress />
+                  </div>
+
+                  <div
+                    className="
+                  bg-white
+                  rounded-lg
+                  shadow-sm
+                  w-full
+                  overflow-hidden
+                "
+                  >
+                    <CheckoutProducts />
+                  </div>
+                </>
               ) : (
-                <span>₹ {shipping.toFixed(2)}</span>
+                <PaymentMethods
+                  selectedMethod={selectedMethod}
+                  setSelectedMethod={setSelectedMethod}
+                />
               )}
             </div>
 
+            {/* RIGHT SIDE */}
             <div
               className="
+            bg-white
+            rounded-lg
+            p-4
+            md:p-6
+            shadow-sm
+            h-fit
+            lg:sticky
+            lg:top-24
+          "
+            >
+              {/* HEADING */}
+              <h2
+                className="
+              text-lg
+              md:text-xl
+              font-semibold
+              text-gray-500
+              border-b
+              border-[#E3E3E3]
+              pb-4
+            "
+              >
+                PRICE DETAILS
+              </h2>
+
+              {/* DETAILS */}
+              <div className="space-y-5 mt-6">
+                <div
+                  className="
+                flex
+                items-center
+                justify-between
+                text-sm
+                sm:text-base
+                md:text-lg
+              "
+                >
+                  <span className="text-gray-700">
+                    Price ({itemsCount} items)
+                  </span>
+
+                  <span>₹ {subtotal.toFixed(2)}</span>
+                </div>
+
+                <div
+                  className="
+                flex
+                items-center
+                justify-between
+                text-sm
+                sm:text-base
+                md:text-lg
+              "
+                >
+                  <span className="text-gray-700">Discount</span>
+
+                  <span
+                    className="
+                  text-green-600
+                  font-medium
+                "
+                  >
+                    - ₹ {discount.toFixed(2)}
+                  </span>
+                </div>
+
+                <div
+                  className="
+                flex
+                items-center
+                justify-between
+                text-sm
+                sm:text-base
+                md:text-lg
+              "
+                >
+                  <span className="text-gray-700">Delivery Charges</span>
+
+                  {shipping === 0 ? (
+                    <span
+                      className="
+                    text-green-600
+                    font-medium
+                  "
+                    >
+                      FREE
+                    </span>
+                  ) : (
+                    <span>₹ {shipping.toFixed(2)}</span>
+                  )}
+                </div>
+
+                <div
+                  className="
+                flex
+                items-center
+                justify-between
+                text-sm
+                sm:text-base
+                md:text-lg
+              "
+                >
+                  <span className="text-gray-700">Tax</span>
+
+                  <span>₹ {tax.toFixed(2)}</span>
+                </div>
+              </div>
+
+              {/* TOTAL */}
+              <div
+                className="
+              border-t
+              border-b
+              border-[#E3E3E3]
+              py-5
+              mt-6
               flex
               items-center
               justify-between
-              text-sm
-              sm:text-base
-              md:text-lg
             "
-            >
-              <span className="text-gray-700">Tax</span>
+              >
+                <span
+                  className="
+                text-lg
+                sm:text-xl
+                md:text-2xl
+                font-semibold
+              "
+                >
+                  Total Amount
+                </span>
 
-              <span>₹ {tax.toFixed(2)}</span>
+                <span
+                  className="
+                text-lg
+                sm:text-xl
+                md:text-2xl
+                font-bold
+              "
+                >
+                  ₹ {total.toFixed(2)}
+                </span>
+              </div>
+
+              {/* SAVE TEXT */}
+              <div
+                className="
+              mt-5
+              text-green-600
+              text-sm
+              md:text-lg
+              font-medium
+            "
+              >
+                You will save ₹ {discount.toFixed(2)}
+                on this order
+              </div>
+
+              {/* BUTTON */}
+              <button
+                onClick={() => {
+                  if (step === 2) {
+                    setStep(3);
+
+                    window.scrollTo({
+                      top: 0,
+                      behavior: "smooth",
+                    });
+                  } else {
+                    handlePlaceOrder();
+
+                    window.scrollTo({
+                      top: 0,
+                      behavior: "smooth",
+                    });
+                  }
+                }}
+                className="
+              w-full
+              mt-8
+              bg-[#FB641B]
+              hover:bg-[#E85A16]
+              py-3
+              md:py-4
+              text-base
+              md:text-lg
+              font-semibold
+              text-white
+              rounded-lg
+              transition-all
+              duration-300
+              cursor-pointer
+            "
+              >
+                {step === 2
+                  ? "CONTINUE"
+                  : selectedMethod === "cod"
+                    ? "PLACE ORDER"
+                    : "PAY NOW"}
+              </button>
             </div>
           </div>
-
-          {/* TOTAL */}
-          <div
-            className="
-            border-t
-            border-b
-            border-[#E3E3E3]
-            py-5
-            mt-6
-            flex
-            items-center
-            justify-between
-          "
-          >
-            <span
-              className="
-              text-lg
-              sm:text-xl
-              md:text-2xl
-              font-semibold
-            "
-            >
-              Total Amount
-            </span>
-
-            <span
-              className="
-              text-lg
-              sm:text-xl
-              md:text-2xl
-              font-bold
-            "
-            >
-              ₹ {total.toFixed(2)}
-            </span>
-          </div>
-
-          {/* SAVE TEXT */}
-          <div
-            className="
-            mt-5
-            text-green-600
-            text-sm
-            md:text-lg
-            font-medium
-          "
-          >
-            You will save ₹ {discount.toFixed(2)}
-            on this order
-          </div>
-
-          {/* BUTTON */}
-          <button
-            onClick={() => {
-              if (step === 2) {
-                setStep(3);
-
-                window.scrollTo({
-                  top: 0,
-                  behavior: "smooth",
-                });
-              } else {
-                handlePlaceOrder();
-
-                window.scrollTo({
-                  top: 0,
-                  behavior: "smooth",
-                });
-              }
-            }}
-            className="
-            w-full
-            mt-8
-            bg-[#FB641B]
-            hover:bg-[#E85A16]
-            py-3
-            md:py-4
-            text-base
-            md:text-lg
-            font-semibold
-            text-white
-            rounded-lg
-            transition-all
-            duration-300
-            cursor-pointer
-          "
-          >
-            {step === 2
-              ? "CONTINUE"
-              : selectedMethod === "cod"
-                ? "PLACE ORDER"
-                : "PAY NOW"}
-          </button>
         </div>
-      </div>
-    </div>
-  );
-};
+      </>
+    );
+  };
 
-export default Checkout;
+  export default Checkout;

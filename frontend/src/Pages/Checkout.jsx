@@ -363,6 +363,7 @@ const handlePlaceOrder = async () => {
             rounded-lg
             transition-all
             duration-300
+            cursor-pointer
           "
           >
             {step === 2
